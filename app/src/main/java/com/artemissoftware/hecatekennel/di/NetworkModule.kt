@@ -1,5 +1,6 @@
 package com.artemissoftware.hecatekennel.di
 
+import com.artemissoftware.common.ApiConstants.BASE_URL
 import com.artemissoftware.remote.DogApi
 import dagger.Module
 import dagger.Provides
@@ -17,7 +18,7 @@ object NetworkModule {
     @Singleton
     fun provideDogApi(): DogApi {
         return Retrofit.Builder()
-            .baseUrl("https://api.thedogapi.com/")
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(DogApi::class.java)
