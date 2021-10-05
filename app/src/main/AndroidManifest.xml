@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.artemissoftware.hecatekennel">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".HecateKennelApplication"
         android:allowBackup="true"
@@ -10,6 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HecateKennel">
+
+<!--
+        com.artemissoftware.presentation.MainActivity
+        -->
+
+
         <activity
             android:name="com.artemissoftware.presentation.MainActivity"
             android:exported="true">

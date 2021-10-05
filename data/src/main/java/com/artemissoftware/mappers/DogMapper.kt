@@ -9,7 +9,7 @@ fun DogDto.toDog(): Dog {
 
     return Dog(
         name = breed.name,
-        breedGroup = breed.breedGroup,
+        breedGroup = breed.breedGroup ?: "",
         temperament = breed.temperament,
         imageUrl = url,
     )

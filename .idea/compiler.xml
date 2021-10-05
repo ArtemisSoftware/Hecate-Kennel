@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.7">
       <module name="HecateKennel.app" target="11" />
+      <module name="HecateKennel.buildSrc" target="11" />
       <module name="HecateKennel.data" target="11" />
       <module name="HecateKennel.presentation" target="11" />
     </bytecodeTargetLevel>
