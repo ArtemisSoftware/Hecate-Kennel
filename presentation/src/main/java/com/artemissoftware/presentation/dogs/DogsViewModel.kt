@@ -1,4 +1,4 @@
-package com.artemissoftware.presentation
+package com.artemissoftware.presentation.dogs
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,26 +10,17 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class GogoViewModel  @Inject constructor(private val getDogsUseCase: GetDogsUseCase) :
-    ViewModel(){
+class DogsViewModel @Inject constructor(private val getDogsUseCase: GetDogsUseCase) : ViewModel(){
 
 
     init {
 
-        val a = 0
-
-        var f = a +1
-
     }
 
 
-     fun getDogs() {
+    fun getDogs() {
 
         getDogsUseCase().onEach { result ->
-
-            val a = 0
-
-            var f = a +1
 
             when (result) {
                 is Resource.Success -> {
@@ -46,5 +37,4 @@ class GogoViewModel  @Inject constructor(private val getDogsUseCase: GetDogsUseC
             }
         }.launchIn(viewModelScope)
     }
-
 }

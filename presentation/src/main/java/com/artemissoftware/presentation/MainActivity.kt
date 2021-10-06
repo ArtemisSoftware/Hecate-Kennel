@@ -10,12 +10,12 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val mainViewModel: GogoViewModel by viewModels()
+    //private val mainViewModel: GogoViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mainViewModel.getDogs()
+        //mainViewModel.getDogs()
     }
 }
