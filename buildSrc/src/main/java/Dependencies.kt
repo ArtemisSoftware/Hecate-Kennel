@@ -67,10 +67,10 @@ object Libs {
     val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:${Versions.mockitoKotlin}"
     val truth = "com.google.truth:truth:${Versions.truth}"
     val circleIndicator = "me.relex:circleindicator:${Versions.circleIndicator}"
-    val hilt = "com.google.dagger:hilt-android:${Versions.hilt}"
-    val hiltJetpack = "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.hiltJetpack}"
-    val hiltJetpackCompiler = "androidx.hilt:hilt-compiler:${Versions.hiltJetpack}"
-    val hiltCompiler = "com.google.dagger:hilt-android-compiler:${Versions.hilt}"
+//    val hilt = "com.google.dagger:hilt-android:${Versions.hilt}"
+//    val hiltJetpack = "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.hiltJetpack}"
+//    val hiltJetpackCompiler = "androidx.hilt:hilt-compiler:${Versions.hiltJetpack}"
+//    val hiltCompiler = "com.google.dagger:hilt-android-compiler:${Versions.hilt}"
 
 
 
