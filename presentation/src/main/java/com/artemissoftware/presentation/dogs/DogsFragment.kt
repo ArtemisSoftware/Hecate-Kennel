@@ -3,11 +3,13 @@ package com.artemissoftware.presentation.dogs
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.artemissoftware.presentation.R
 import com.artemissoftware.presentation.databinding.FragmentDogsBinding
 import com.artemissoftware.presentation.dogs.adapters.DogListAdapter
 import androidx.fragment.app.viewModels
+import com.artemissoftware.common.Resource
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,20 +31,19 @@ class DogsFragment : Fragment(R.layout.fragment_dogs) {
         setupRecyclerView()
         initObservers()
 
-        dogsViewModel.getDogs()
     }
 
 
     private fun initObservers(){
 
 
-//        viewModel.restaurants.observe(this@MainActivity) { result ->
-//            restaurantAdapter.submitList(result.data)
-//
-//            progressBar.isVisible = result is Resource.Loading && result.data.isNullOrEmpty()
+        dogsViewModel.dogs.observe(viewLifecycleOwner) { result ->
+            listAdapter.submitList(result.data)
+
+            binding.progressBar.isVisible = result is Resource.Loading && result.data.isNullOrEmpty()
 //            textViewError.isVisible = result is Resource.Error && result.data.isNullOrEmpty()
 //            textViewError.text = result.error?.localizedMessage
-//        }
+        }
 
     }
 
