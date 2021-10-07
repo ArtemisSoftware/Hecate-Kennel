@@ -16,7 +16,7 @@ class DogRepositoryImpl @Inject constructor (private val dogApi: DogApi): DogRep
     }
 
     override suspend fun getMeme(): Meme {
-        return dogApi.getMeme().toMeme()
+        return dogApi.getMeme().map { it.toMeme() }.first()
     }
 
 

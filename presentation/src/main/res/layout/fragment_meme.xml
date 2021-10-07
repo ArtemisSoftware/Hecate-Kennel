@@ -19,13 +19,12 @@
         app:layout_constraintVertical_chainStyle="packed" />
 
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="@string/hello_blank_fragment"
+        android:text="@string/meme_of_the_day"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/img_meme"
         app:layout_constraintHorizontal_bias="0.5"

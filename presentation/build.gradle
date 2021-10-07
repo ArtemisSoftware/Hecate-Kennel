@@ -65,6 +65,9 @@ dependencies {
 
     implementation(AndroidX.fragmentKtx)
 
+    implementation(Glide.glide)
+    annotationProcessor (Glide.compiler)
+
     implementation(project(Modules.common))
     implementation(project(Modules.domain))
 }

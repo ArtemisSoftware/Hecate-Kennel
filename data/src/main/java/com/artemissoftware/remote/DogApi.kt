@@ -13,5 +13,5 @@ interface DogApi {
 
 
     @GET("v1/images/search")
-    suspend fun getMeme(@Query("mime_types") mimeType: String = "gif"): MemeDto
+    suspend fun getMeme(@Query("mime_types") mimeType: String = "gif"): List<MemeDto>
 }
