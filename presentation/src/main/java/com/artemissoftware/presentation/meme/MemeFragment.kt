@@ -9,17 +9,28 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.artemissoftware.common.Resource
 import com.artemissoftware.presentation.R
-import com.artemissoftware.presentation.dogs.DogsViewModel
+import com.artemissoftware.presentation.databinding.FragmentMemeBinding
+import com.bumptech.glide.RequestManager
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MemeFragment : Fragment(R.layout.fragment_meme) {
 
 
+    @Inject
+    lateinit var glide: RequestManager
+
+
+    private var _binding: FragmentMemeBinding? = null
+    private val binding get() = _binding!!
+
+
     private val viewModel: MemeViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        //--Glide.with(context).load(GIF_URI).into(new GlideDrawableImageViewTarget(IMAGE_VIEW));
+
+        _binding = FragmentMemeBinding.bind(view)
 
         initObservers()
     }
@@ -30,7 +41,9 @@ class MemeFragment : Fragment(R.layout.fragment_meme) {
 
         viewModel.meme.observe(viewLifecycleOwner) { result ->
 
-            //binding.progressBar.isVisible = result is Resource.Loading && result.data.isNullOrEmpty()
+            glide.load(result.data?.url).into(binding.imgMeme);
+
+            binding.progressBar.isVisible = result is Resource.Loading
 //            textViewError.isVisible = result is Resource.Error && result.data.isNullOrEmpty()
 //            textViewError.text = result.error?.localizedMessage
         }

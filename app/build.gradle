@@ -69,7 +69,8 @@ dependencies {
     implementation(NavigationComponents.fragment)
     implementation(NavigationComponents.ui)
 
-
+    implementation(Glide.glide)
+    annotationProcessor (Glide.compiler)
 
     implementation(project(Modules.common))
     implementation(project(Modules.data))
