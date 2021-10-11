@@ -10,18 +10,23 @@ import com.artemissoftware.presentation.databinding.FragmentDogsBinding
 import com.artemissoftware.presentation.dogs.adapters.DogListAdapter
 import androidx.fragment.app.viewModels
 import com.artemissoftware.common.Resource
+import com.bumptech.glide.RequestManager
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class DogsFragment : Fragment(R.layout.fragment_dogs) {
 
+
+    @Inject
+    lateinit var glide: RequestManager
 
     private var _binding: FragmentDogsBinding? = null
     private val binding get() = _binding!!
 
 
     private val dogsViewModel: DogsViewModel by viewModels()
-    private val listAdapter by lazy { DogListAdapter() }
+    private val listAdapter by lazy { DogListAdapter(glide) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 

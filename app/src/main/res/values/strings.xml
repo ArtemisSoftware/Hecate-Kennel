@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">HecateKennel</string>
+    <string name="dogs">Dogs</string>
+    <string name="meme_of_the_day">Meme of the day</string>
+    <string name="kennel">Kennel</string>
 </resources>

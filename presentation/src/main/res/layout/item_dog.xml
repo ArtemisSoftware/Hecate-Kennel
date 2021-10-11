@@ -42,6 +42,7 @@
 
                 <!-- Media -->
                 <ImageView
+                    android:id="@+id/img_dog"
                     android:layout_width="match_parent"
                     android:layout_height="194dp"
                     android:scaleType="centerCrop"

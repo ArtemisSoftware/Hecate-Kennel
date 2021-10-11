@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/dogsFragment"
-        android:title="Breaking News"
+        android:title="@string/kennel"
         android:icon="@drawable/ic_launcher_foreground" />
 
     <item android:id="@+id/memeFragment"
-        android:title="Saved News"
+        android:title="@string/meme_of_the_day"
         android:icon="@drawable/ic_launcher_foreground" />
 
 
