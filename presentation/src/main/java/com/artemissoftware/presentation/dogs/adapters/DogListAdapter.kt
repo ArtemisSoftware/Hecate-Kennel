@@ -9,7 +9,7 @@ import com.artemissoftware.presentation.databinding.ItemDogBinding
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 
-class DogListAdapter(private val glide: RequestManager) : ListAdapter<Dog, DogListAdapter.DogViewHolder>(DogDiffCallback()) {
+class DogListAdapter(private val glide: RequestManager, private val listener: DogListener) : ListAdapter<Dog, DogListAdapter.DogViewHolder>(DogDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DogViewHolder {
 
@@ -21,18 +21,18 @@ class DogListAdapter(private val glide: RequestManager) : ListAdapter<Dog, DogLi
         holder.bind(getItem(position))
     }
 
-    inner class DogViewHolder(private val binding: ItemDogBinding) : RecyclerView.ViewHolder(binding.getRoot())/*, View.OnClickListener*/ {
-//        override fun onClick(v: View?) {
-//            when (v) {
-//                itemView -> {
-//
-//                }
-//            }
-//        }
-//
-//        init {
-//            itemView.radio_button.setOnClickListener(this)
-//        }
+    inner class DogViewHolder(private val binding: ItemDogBinding) : RecyclerView.ViewHolder(binding.getRoot()) {
+
+        init {
+            binding.root.setOnClickListener {
+
+                val position = adapterPosition
+
+                if(position != RecyclerView.NO_POSITION){
+                    listener.onItemClick(getItem(position))
+                }
+            }
+        }
 
         fun bind(model: Dog) {
             with(binding) {

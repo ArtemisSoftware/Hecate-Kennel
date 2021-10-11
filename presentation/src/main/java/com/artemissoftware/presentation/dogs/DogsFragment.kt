@@ -9,13 +9,16 @@ import com.artemissoftware.presentation.R
 import com.artemissoftware.presentation.databinding.FragmentDogsBinding
 import com.artemissoftware.presentation.dogs.adapters.DogListAdapter
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
 import com.artemissoftware.common.Resource
+import com.artemissoftware.domain.model.Dog
+import com.artemissoftware.presentation.dogs.adapters.DogListener
 import com.bumptech.glide.RequestManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class DogsFragment : Fragment(R.layout.fragment_dogs) {
+class DogsFragment : Fragment(R.layout.fragment_dogs), DogListener{
 
 
     @Inject
@@ -26,7 +29,7 @@ class DogsFragment : Fragment(R.layout.fragment_dogs) {
 
 
     private val dogsViewModel: DogsViewModel by viewModels()
-    private val listAdapter by lazy { DogListAdapter(glide) }
+    private val listAdapter by lazy { DogListAdapter(glide, this) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
@@ -62,8 +65,20 @@ class DogsFragment : Fragment(R.layout.fragment_dogs) {
         }
     }
 
+    override fun onItemClick(dog: Dog) {
 
 
 
+        //DogsFragmentDirections
+        //DogsFra
+        //val action = DogsFra.actionTasksFragmentToAddEditTaskFragment(event.task, "Edit Task")
+        //findNavController().navigate(action)
+        //findNavController().
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
 }

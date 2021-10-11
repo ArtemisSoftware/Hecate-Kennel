@@ -49,4 +49,10 @@ class MemeFragment : Fragment(R.layout.fragment_meme) {
         }
 
     }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
