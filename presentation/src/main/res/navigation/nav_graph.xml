@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/dogsFragment">
 
     <fragment
         android:id="@+id/dogsFragment"
         android:name="com.artemissoftware.presentation.dogs.DogsFragment"
-        android:label="DogsFragment" >
+        android:label="fragment_dogs"
+        tools:layout="@layout/fragment_dogs" >
         <action
             android:id="@+id/action_dogsFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
@@ -19,5 +21,6 @@
     <fragment
         android:id="@+id/detailsFragment"
         android:name="com.artemissoftware.presentation.details.DetailsFragment"
-        android:label="DetailsFragment" />
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_details" />
 </navigation>

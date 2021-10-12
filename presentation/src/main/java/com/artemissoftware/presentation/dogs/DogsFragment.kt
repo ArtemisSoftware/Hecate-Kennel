@@ -10,6 +10,8 @@ import com.artemissoftware.presentation.databinding.FragmentDogsBinding
 import com.artemissoftware.presentation.dogs.adapters.DogListAdapter
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.artemissoftware.common.Resource
 import com.artemissoftware.domain.model.Dog
 import com.artemissoftware.presentation.dogs.adapters.DogListener
@@ -35,6 +37,7 @@ class DogsFragment : Fragment(R.layout.fragment_dogs), DogListener{
 
 
         _binding = FragmentDogsBinding.bind(view)
+
 
         setupRecyclerView()
         initObservers()
@@ -67,13 +70,8 @@ class DogsFragment : Fragment(R.layout.fragment_dogs), DogListener{
 
     override fun onItemClick(dog: Dog) {
 
-
-
-        //DogsFragmentDirections
-        //DogsFra
-        //val action = DogsFra.actionTasksFragmentToAddEditTaskFragment(event.task, "Edit Task")
-        //findNavController().navigate(action)
-        //findNavController().
+        val action = DogsFragmentDirections.actionDogsFragmentToDetailsFragment()
+        findNavController().navigate(action)
     }
 
     override fun onDestroyView() {
