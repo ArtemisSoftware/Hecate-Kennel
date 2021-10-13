@@ -1,4 +1,4 @@
-package com.artemissoftware.presentation.details
+package com.artemissoftware.presentation.details.models
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

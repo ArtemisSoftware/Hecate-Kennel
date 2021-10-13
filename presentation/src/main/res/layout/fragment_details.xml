@@ -9,8 +9,8 @@
 
     <data>
         <variable
-            name="dog"
-            type="com.artemissoftware.domain.model.Dog"/>
+            name="dogDetail"
+            type="com.artemissoftware.presentation.details.models.DogDetail"/>
     </data>
 
 <!--<androidx.coordinatorlayout.widget.CoordinatorLayout-->
@@ -88,6 +88,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
+            app:title="@{dogDetail.name}"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar">
@@ -114,7 +115,7 @@
     <include
         android:id="@+id/layout"
         layout="@layout/content_dog_detail"
-        app:passedText="@{dog.temperament}"/>
+        app:passedText="@{dogDetail.temperament}"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
