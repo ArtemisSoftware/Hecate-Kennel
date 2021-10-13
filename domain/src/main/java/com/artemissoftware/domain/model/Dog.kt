@@ -1,5 +1,6 @@
 package com.artemissoftware.domain.model
 
+
 data class Dog(
 
     val name: String,

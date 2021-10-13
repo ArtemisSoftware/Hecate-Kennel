@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_dogsFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
+        <argument
+            android:name="DogDetail"
+            app:argType="com.artemissoftware.presentation.details.DogDetail" />
     </fragment>
     <fragment
         android:id="@+id/memeFragment"
