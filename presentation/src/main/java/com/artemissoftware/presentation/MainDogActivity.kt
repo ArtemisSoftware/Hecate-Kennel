@@ -3,11 +3,14 @@ package com.artemissoftware.presentation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_dog_main.*
+import kotlinx.android.synthetic.main.activity_dog_main.toolbar
 
 @AndroidEntryPoint
 class MainDogActivity : AppCompatActivity() {
@@ -29,5 +32,12 @@ class MainDogActivity : AppCompatActivity() {
     }
 
 
+    fun lolo(newToolbar: Toolbar){
+        toolbar.visibility = View.GONE
+
+        setSupportActionBar(newToolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+    }
 
 }
