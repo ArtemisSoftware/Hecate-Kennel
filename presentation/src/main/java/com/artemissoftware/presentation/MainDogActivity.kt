@@ -32,7 +32,7 @@ class MainDogActivity : AppCompatActivity() {
     }
 
 
-    fun lolo(newToolbar: Toolbar){
+    fun updateToolbar(newToolbar: Toolbar){
         toolbar.visibility = View.GONE
 
         setSupportActionBar(newToolbar)

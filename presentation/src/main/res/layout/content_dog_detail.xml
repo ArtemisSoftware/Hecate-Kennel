@@ -8,9 +8,8 @@
 
 
     <data>
-        <variable
-            name="passedText"
-            type="String"/>
+        <variable name="breed" type="String"/>
+        <variable name="temperament" type="String"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,7 +43,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="20dp"
-                        android:text="@{passedText}"/>
+                        android:text="@{breed}"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -61,7 +60,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="20dp"
-                        android:text="@{passedText}"/>
+                        android:text="@{temperament}"/>
                 </LinearLayout>
 
             </LinearLayout>
