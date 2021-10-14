@@ -12,6 +12,6 @@ interface DogApi {
     suspend fun getDogs(@Query("limit") limit: String, @Query("order") order: String = "Desc"): List<DogDto>
 
 
-    @GET("v1/images/search")
+    @GET("v1/images/se_arch")
     suspend fun getMeme(@Query("mime_types") mimeType: String = "gif"): List<MemeDto>
 }

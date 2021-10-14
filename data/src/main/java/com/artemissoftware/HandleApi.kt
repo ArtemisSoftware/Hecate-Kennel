@@ -1,5 +1,8 @@
 package com.artemissoftware
 
+import com.artemissoftware.errors.HecateKennelApiNetworkException
+import com.artemissoftware.remote.dto.ErrorResponseDto
+import com.google.gson.Gson
 import retrofit2.HttpException
 import java.io.IOException
 import java.net.SocketTimeoutException
@@ -18,13 +21,17 @@ object HandleApi {
 //                Log.e("BaseRemoteRepo", "Call error: ${e.localizedMessage}", e.cause)
                 when(ex){
                     is HttpException -> {
-//                        if(e.code() == 401) emitter.onError(ErrorType.SESSION_EXPIRED)
-//                        else {
-//                            val body = e.response()?.errorBody()
-//                            emitter.onError(getErrorMessage(body))
-//                        }
 
-                        throw ex
+                        convertErrorBody(ex)?.let { error ->
+                            throw HecateKennelApiNetworkException(
+                                code = error.code,
+                                message = error.message,
+                                errors = listOf(error.level)
+                            )
+                        } ?: run {
+                            throw ex
+                        }
+
                     }
                     is SocketTimeoutException -> throw ex//emitter.onError(ErrorType.TIMEOUT)
                     is IOException -> throw ex//emitter.onError(ErrorType.NETWORK)
@@ -32,4 +39,17 @@ object HandleApi {
                 }
         }
     }
+
+
+    private fun convertErrorBody(httpException: HttpException): ErrorResponseDto? {
+        return try {
+            httpException.response()?.errorBody()?.let {
+                Gson().fromJson(it.charStream(), ErrorResponseDto::class.java)
+            }
+        } catch (exception: Exception) {
+            null
+        }
+    }
+
+
 }
