@@ -1,5 +1,7 @@
 package com.artemissoftware.repository
 
+import com.artemissoftware.HandleApi
+import com.artemissoftware.HandleApi.safeApiCall
 import com.artemissoftware.common.ApiConstants.NUMBER_OF_RESULTS_PER_PAGE
 import com.artemissoftware.domain.model.Dog
 import com.artemissoftware.domain.model.Meme
@@ -16,7 +18,12 @@ class DogRepositoryImpl @Inject constructor (private val dogApi: DogApi): DogRep
     }
 
     override suspend fun getMeme(): Meme {
-        return dogApi.getMeme().map { it.toMeme() }.first()
+
+        return safeApiCall {
+            dogApi.getMeme().map { it.toMeme() }.first()
+        }
+
+        //return dogApi.getMeme().map { it.toMeme() }.first()
     }
 
 

@@ -36,4 +36,10 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         glide.load(args.dogDetail.imageUrl).into(binding.imgBanner);
 
     }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
