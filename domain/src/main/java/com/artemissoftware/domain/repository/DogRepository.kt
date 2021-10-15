@@ -6,7 +6,7 @@ import com.artemissoftware.domain.model.Meme
 
 interface DogRepository {
 
-    suspend fun getDogs(): List<Dog>
+    suspend fun getDogs(): ApiNetworkResponse<List<Dog>>
 
     suspend fun getMeme(): ApiNetworkResponse<Meme>
 }

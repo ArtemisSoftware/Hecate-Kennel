@@ -11,6 +11,7 @@ fun DogDto.toDog(): Dog {
         name = breed.name,
         breedGroup = breed.breedGroup ?: "",
         temperament = breed.temperament ?: "",
+        lifeSpan = breed.lifeSpan ?: "",
         imageUrl = url,
     )
 }

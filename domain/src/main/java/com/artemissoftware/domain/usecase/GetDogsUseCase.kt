@@ -1,6 +1,8 @@
 package com.artemissoftware.domain.usecase
 
 import com.artemissoftware.common.Resource
+import com.artemissoftware.domain.errors.DataException
+import com.artemissoftware.domain.errors.UnknownAPIException
 import com.artemissoftware.domain.model.Dog
 import com.artemissoftware.domain.repository.DogRepository
 import kotlinx.coroutines.flow.Flow
@@ -11,8 +13,17 @@ class GetDogsUseCase @Inject constructor(private val repository: DogRepository) 
 
     operator fun invoke(): Flow<Resource<List<Dog>>> = flow {
 
-        val result = repository.getDogs()
-        emit(Resource.Success(result))
+        val apiResult = repository.getDogs()
+
+        apiResult.data ?: run {
+
+            when (apiResult.error.code) {
+                400 -> throw DataException()
+                else -> throw UnknownAPIException(apiResult.error.message)
+            }
+        }
+
+        emit(Resource.Success(apiResult.data!!))
 
     }
 

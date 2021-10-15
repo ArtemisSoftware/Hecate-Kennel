@@ -4,6 +4,8 @@ import com.artemissoftware.common.ApiConstants.BASE_URL
 import com.artemissoftware.common.ApiConstants.CONNECT_TIMEOUT
 import com.artemissoftware.common.ApiConstants.READ_TIMEOUT
 import com.artemissoftware.remote.DogApi
+import com.artemissoftware.remote.sources.DogApiSource
+import com.artemissoftware.remote.sources.DogApiSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,6 +47,12 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(DogApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDogApiSource(dogApi: DogApi): DogApiSource {
+        return DogApiSourceImpl(dogApi)
     }
 
 }

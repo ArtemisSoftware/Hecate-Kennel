@@ -20,7 +20,7 @@ class GetMemeUseCase @Inject constructor(private val repository: DogRepository) 
 
             when (apiResult.error.code) {
                 400 -> throw DataException()
-                else -> throw UnknownAPIException()
+                else -> throw UnknownAPIException(apiResult.error.message)
             }
         }
 

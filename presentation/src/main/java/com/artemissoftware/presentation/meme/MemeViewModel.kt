@@ -44,7 +44,7 @@ class MemeViewModel @Inject constructor(private val getMemeUseCase: GetMemeUseCa
                         _meme.value = Resource.Error("Couldn't find an image")
                     }
                     else -> {
-                        val dd = 0
+                        _meme.value = Resource.Error(ex.message?: "")
                     }
                 }
             }

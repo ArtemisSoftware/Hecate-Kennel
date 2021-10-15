@@ -7,4 +7,5 @@ data class Dog(
     val breedGroup: String,
     val temperament: String,
     val imageUrl: String,
+    val lifeSpan: String,
 )

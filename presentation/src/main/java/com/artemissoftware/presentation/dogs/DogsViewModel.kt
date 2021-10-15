@@ -5,9 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.*
 import com.artemissoftware.common.Resource
+import com.artemissoftware.domain.errors.DataException
 import com.artemissoftware.domain.model.Dog
 import com.artemissoftware.domain.usecase.GetDogsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -29,23 +31,25 @@ class DogsViewModel @Inject constructor(private val getDogsUseCase: GetDogsUseCa
 
         _dogs.value = Resource.Loading()
 
-        getDogsUseCase().onEach { result ->
+        viewModelScope.launch {
 
-            _dogs.value = result
+            try {
 
-            when (result) {
-                is Resource.Success -> {
-//                    _state.value = CoinsListState(coins = result.data ?: emptyList())
+                getDogsUseCase.invoke().collect { result ->
+                    _dogs.value = result
                 }
-//                is Resource.Error -> {
-//                    _state.value = CoinsListState(
-//                        error = result.message ?: "An unexpected error occured"
-//                    )
-//                }
-//                is Resource.Loading -> {
-//                    _state.value = CoinsListState(isLoading = true)
-//                }
+
+            } catch (ex: Exception) {
+                when (ex) {
+                    is DataException ->{
+                        _dogs.value = Resource.Error("Couldn't find an image")
+                    }
+                    else -> {
+                        _dogs.value = Resource.Error(ex.message?: "")
+                    }
+                }
             }
-        }.launchIn(viewModelScope)
+        }
+
     }
 }
