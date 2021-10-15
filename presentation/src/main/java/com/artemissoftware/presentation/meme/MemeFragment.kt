@@ -9,6 +9,7 @@ import com.artemissoftware.common.Resource
 import com.artemissoftware.presentation.R
 import com.artemissoftware.presentation.databinding.FragmentMemeBinding
 import com.bumptech.glide.RequestManager
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -42,10 +43,18 @@ class MemeFragment : Fragment(R.layout.fragment_meme) {
             glide.load(result.data?.url).into(binding.imgMeme);
 
             binding.progressBar.isVisible = result is Resource.Loading
-//            textViewError.isVisible = result is Resource.Error && result.data.isNullOrEmpty()
+            setError(result is Resource.Error, result.message)
 //            textViewError.text = result.error?.localizedMessage
         }
 
+    }
+
+
+    private fun setError(visible: Boolean, message: String?){
+
+        if(visible) {
+            Snackbar.make(requireView(), message!!, Snackbar.LENGTH_LONG).show()
+        }
     }
 
 
