@@ -27,6 +27,34 @@ android {
         }
     }
 
+
+    flavorDimensions "env"
+
+    productFlavors {
+        dev {
+            dimension "env"
+            applicationIdSuffix ".dev"
+            manifestPlaceholders variant: 'Hecate Kennel - Dev'
+//            resValue "string", "app_name", "Hecate Kennel - Dev"
+//            signingConfig signingConfigs.configDev
+//
+//            buildConfigField("String", "BASE_URL", "\"https://nodejs-appmobilidade-fe-dot-mobilidadeeletrica-edp-dev.appspot.com\"")
+        }
+
+        prod {
+            dimension "env"
+            manifestPlaceholders variant: 'Hecate Kennel'
+//            resValue "string", "app_name", "Hecate Kennel"
+//            signingConfig signingConfigs.configProd
+//
+//            buildConfigField("String", "BASE_URL", "\"https://nodejs-appmobilidade-fe-dot-mobilidadeeletrica-edp-dev.appspot.com\"")
+        }
+
+
+
+    }
+
+
     buildFeatures {
         dataBinding true
         viewBinding true
