@@ -27,6 +27,25 @@ android {
         }
     }
 
+
+    flavorDimensions "env", "premium"
+    productFlavors {
+        dev {
+            dimension "env"
+        }
+        prod {
+            dimension "env"
+        }
+        free {
+            dimension "premium"
+            buildConfigField "boolean", "PREMIUM", "false"
+        }
+        paid {
+            dimension "premium"
+            buildConfigField "boolean", "PREMIUM", "true"
+        }
+    }
+
     buildFeatures {
         dataBinding true
         viewBinding true
@@ -39,6 +58,8 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+
 }
 
 dependencies {

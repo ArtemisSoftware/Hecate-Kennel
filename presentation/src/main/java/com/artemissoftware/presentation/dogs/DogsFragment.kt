@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.artemissoftware.common.Resource
 import com.artemissoftware.domain.model.Dog
 import com.artemissoftware.mappers.toDogDetail
+import com.artemissoftware.presentation.BuildConfig
 import com.artemissoftware.presentation.dogs.adapters.DogListener
 import com.bumptech.glide.RequestManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -69,8 +70,11 @@ class DogsFragment : Fragment(R.layout.fragment_dogs), DogListener{
 
     override fun onItemClick(dog: Dog) {
 
-        val action = DogsFragmentDirections.actionDogsFragmentToDetailsFragment(dog.toDogDetail())
-        findNavController().navigate(action)
+        if(BuildConfig.PREMIUM) {
+            val action =
+                DogsFragmentDirections.actionDogsFragmentToDetailsFragment(dog.toDogDetail())
+            findNavController().navigate(action)
+        }
     }
 
     override fun onDestroyView() {

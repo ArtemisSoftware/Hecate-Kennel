@@ -28,14 +28,13 @@ android {
     }
 
 
-    flavorDimensions "env"
+    flavorDimensions "env", "premium"
 
     productFlavors {
         dev {
             dimension "env"
             applicationIdSuffix ".dev"
             manifestPlaceholders variant: 'Hecate Kennel - Dev'
-//            resValue "string", "app_name", "Hecate Kennel - Dev"
 //            signingConfig signingConfigs.configDev
 //
 //            buildConfigField("String", "BASE_URL", "\"https://nodejs-appmobilidade-fe-dot-mobilidadeeletrica-edp-dev.appspot.com\"")
@@ -44,16 +43,20 @@ android {
         prod {
             dimension "env"
             manifestPlaceholders variant: 'Hecate Kennel'
-//            resValue "string", "app_name", "Hecate Kennel"
 //            signingConfig signingConfigs.configProd
 //
 //            buildConfigField("String", "BASE_URL", "\"https://nodejs-appmobilidade-fe-dot-mobilidadeeletrica-edp-dev.appspot.com\"")
+//            buildConfigField ("String", "LOLO", 'prod')
         }
-
-
-
+        free {
+            dimension "premium"
+            buildConfigField "boolean", "PREMIUM", "false"
+        }
+        paid {
+            dimension "premium"
+            buildConfigField "boolean", "PREMIUM", "true"
+        }
     }
-
 
     buildFeatures {
         dataBinding true
@@ -67,7 +70,40 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+
+
+//    applicationVariants.all { variant ->
+//
+//        def name = variant.getName()
+//
+//        variant.buildConfigField 'boolean', 'PREMIUM', 'false'
+//
+//
+//        if (name.contains("Dev")) {
+//            variant.buildConfigField 'String', 'SUBDOMAIN', '"dev"'
+//        }
+//        else{
+//            variant.buildConfigField 'String', 'SUBDOMAIN', '"api"'
+//        }
+//
+//
+////        // Default values
+////        variant.buildConfigField 'boolean', 'ENABLE_ANALYTICS', 'false'
+////        // Specific values
+////        if (name.contains("Dev")) {
+////            variant.buildConfigField 'String', 'SUBDOMAIN', '"dev"'
+////        } else if (name.contains("Staging")) {
+////            variant.buildConfigField 'String', 'SUBDOMAIN', '"staging-api"'
+////        } else if (name.contains("Production")) {
+////            variant.buildConfigField 'String', 'SUBDOMAIN', '"api"'
+////            variant.buildConfigField 'boolean', 'ENABLE_ANALYTICS', 'true'
+////        }
+//    }
+
+
 }
+
 
 dependencies {
 
