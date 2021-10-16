@@ -11,3 +11,4 @@ App that shows random dogs
 - Dagger Hilt
 - Glide
 - Navigation components
+- Flavours
