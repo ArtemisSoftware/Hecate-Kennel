@@ -25,6 +25,19 @@ class MainDogActivity : AppCompatActivity() {
 
         navController = kennelNavHostFragment.findNavController()
         bottomNavigationView.setupWithNavController(navController)
+
+
+        navController.addOnDestinationChangedListener{_, destination, _ ->
+
+            if(destination.id == R.id.detailsFragment){
+                bottomNavigationView.visibility = View.GONE
+            }
+            else{
+                bottomNavigationView.visibility = View.VISIBLE
+                updateToolbar()
+            }
+        }
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -38,6 +51,11 @@ class MainDogActivity : AppCompatActivity() {
         setSupportActionBar(newToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+    }
+
+    private fun updateToolbar(){
+        toolbar.visibility = View.VISIBLE
+        setSupportActionBar(toolbar)
     }
 
 }
