@@ -18,7 +18,6 @@ import androidx.lifecycle.lifecycleScope
 import com.artemissoftware.presentation.R
 import com.artemissoftware.presentation.databinding.FragmentPetBinding
 import com.bumptech.glide.RequestManager
-import com.karumi.dexter.BuildConfig.APPLICATION_ID
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -28,10 +27,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject
-import android.R
-
-
-
+import android.content.Context
+import androidx.activity.result.contract.ActivityResultContract
+import com.artemissoftware.util.imageOptions
+import com.theartofdev.edmodo.cropper.CropImage
 
 
 @AndroidEntryPoint
@@ -52,7 +51,8 @@ class PetFragment : Fragment(R.layout.fragment_pet) {
 
         _binding = FragmentPetBinding.bind(view)
         initOnClicklistener()
-        takeImage()
+        imageOptions()
+    //takeImage()
     }
 
     private fun initOnClicklistener(){
@@ -267,8 +267,8 @@ class PetFragment : Fragment(R.layout.fragment_pet) {
     private val takeImageResult = registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
         if (isSuccess) {
             latestTmpUri?.let { uri ->
-                //binding.imgPet.setImageURI(uri)
-                loadProfile(uri)
+                //loadProfile(uri)
+                cropLaucher.launch(uri)
             }
         }
     }
@@ -294,19 +294,44 @@ class PetFragment : Fragment(R.layout.fragment_pet) {
 
 
 //    private fun cropImage(sourceUri: Uri) {
-//        val destinationUri =
-//            Uri.fromFile(File(getCacheDir(), queryName(getContentResolver(), sourceUri)))
+//
+//        val destinationUri = Uri.fromFile(File(requireActivity().cacheDir, queryName(requireActivity().contentResolver, sourceUri)))
 //        val options: UCrop.Options = Options()
+//
 //        options.setCompressionQuality(IMAGE_COMPRESSION)
 //        options.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary))
 //        options.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary))
 //        options.setActiveWidgetColor(ContextCompat.getColor(this, R.color.colorPrimary))
+//
 //        if (lockAspectRatio) options.withAspectRatio(ASPECT_RATIO_X, ASPECT_RATIO_Y)
+//
 //        if (setBitmapMaxWidthHeight) options.withMaxResultSize(bitmapMaxWidth, bitmapMaxHeight)
+//
 //        UCrop.of(sourceUri, destinationUri)
 //            .withOptions(options)
 //            .start(this)
 //    }
 
 
+    private val cropActivityContract = object : ActivityResultContract<Any?, Uri?>(){
+        override fun createIntent(context: Context, input: Any?): Intent {
+            return CropImage.activity(input as Uri)
+                .setAspectRatio(16, 16)
+                .getIntent(requireActivity());
+        }
+
+        override fun parseResult(resultCode: Int, intent: Intent?): Uri? {
+            return CropImage.getActivityResult(intent)?.uri
+        }
+
+
+    }
+
+    private val cropLaucher = registerForActivityResult(cropActivityContract) {
+
+        it?.let { uri ->
+            loadProfile(uri)
+        }
+
+    }
 }

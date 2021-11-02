@@ -102,5 +102,5 @@ dependencies {
 
 
     implementation(Dexter.dexter)
-
+    api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
 }
