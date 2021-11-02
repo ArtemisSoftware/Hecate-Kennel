@@ -5,4 +5,5 @@
 
     <string name="dogs">Dogs</string>
     <string name="kennel">Kennel</string>
+    <string name="pet">Pet</string>
 </resources>

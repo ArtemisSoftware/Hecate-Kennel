@@ -9,5 +9,7 @@
         android:title="@string/meme_of_the_day"
         android:icon="@drawable/ic_image" />
 
-
+    <item android:id="@+id/petFragment"
+        android:title="@string/pet"
+        android:icon="@drawable/ic_dog_profile" />
 </menu>

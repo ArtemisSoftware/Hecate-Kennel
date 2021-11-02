@@ -28,4 +28,9 @@
             app:argType="com.artemissoftware.presentation.details.models.DogDetail" />
 
     </fragment>
+    <fragment
+        android:id="@+id/petFragment"
+        android:name="com.artemissoftware.presentation.pet.PetFragment"
+        android:label="fragment_pet"
+        tools:layout="@layout/fragment_pet" />
 </navigation>

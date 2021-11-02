@@ -20,24 +20,35 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import androidx.core.app.ActivityCompat.startActivityForResult
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat.startActivityForResult
+import dagger.hilt.android.AndroidEntryPoint
+import androidx.core.content.ContextCompat
+import com.bumptech.glide.RequestManager
+import javax.inject.Inject
+import java.io.IOException
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.FileProvider.getUriForFile
+import java.io.File
 
 
-
-
-
-
-
-
-
-
-
+@AndroidEntryPoint
 class PetFragment : Fragment(R.layout.fragment_pet) {
+
+
+    @Inject
+    lateinit var glide: RequestManager
 
     private var _binding: FragmentPetBinding? = null
     private val binding get() = _binding!!
+
+
+    lateinit var fileName: String
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
@@ -77,6 +88,27 @@ class PetFragment : Fragment(R.layout.fragment_pet) {
     }
 
 
+    private fun loadProfile(url: String) {
+
+        glide.load(url)
+            .into(binding.imgPet)
+        binding.imgPet.setColorFilter(ContextCompat.getColor(requireContext(), android.R.color.transparent))
+    }
+
+
+    private fun getCacheImagePath(fileName: String): Uri? {
+        val path = File(requireActivity().externalCacheDir, "camera")
+        if (!path.exists()) path.mkdirs()
+        val image = File(path, fileName)
+        return getUriForFile(
+            requireContext(),
+            requireActivity().packageName.toString() + ".provider",
+            image
+        )
+    }
+
+
+
     private fun launchGalleryIntent() {
 //        val intent = Intent(this@MainActivity, ImagePickerActivity::class.java)
 //        intent.putExtra(
@@ -92,6 +124,26 @@ class PetFragment : Fragment(R.layout.fragment_pet) {
 
         chooseImageFromGallery()
     }
+
+    private fun launchCameraIntent() {
+//        val intent = Intent(this@MainActivity, ImagePickerActivity::class.java)
+//        intent.putExtra(
+//            ImagePickerActivity.INTENT_IMAGE_PICKER_OPTION,
+//            ImagePickerActivity.REQUEST_IMAGE_CAPTURE
+//        )
+//
+//        // setting aspect ratio
+//        intent.putExtra(ImagePickerActivity.INTENT_LOCK_ASPECT_RATIO, true)
+//        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_X, 1) // 16x9, 1x1, 3:4, 3:2
+//        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_Y, 1)
+//
+//        // setting maximum bitmap width and height
+//        intent.putExtra(ImagePickerActivity.INTENT_SET_BITMAP_MAX_WIDTH_HEIGHT, true)
+//        intent.putExtra(ImagePickerActivity.INTENT_BITMAP_MAX_WIDTH, 1000)
+//        intent.putExtra(ImagePickerActivity.INTENT_BITMAP_MAX_HEIGHT, 1000)
+        takeCameraImage()
+    }
+
 
 
     private fun chooseImageFromGallery() {
@@ -119,10 +171,66 @@ class PetFragment : Fragment(R.layout.fragment_pet) {
     }
 
 
+    private fun takeCameraImage() {
+        Dexter.withContext(requireActivity())
+            .withPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            .withListener(object : MultiplePermissionsListener {
+                override fun onPermissionsChecked(report: MultiplePermissionsReport) {
+                    if (report.areAllPermissionsGranted()) {
+                        fileName = System.currentTimeMillis().toString() + ".jpg"
+
+                        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                        takePictureIntent.putExtra(
+                            MediaStore.EXTRA_OUTPUT,
+                            getCacheImagePath(fileName)
+                        )
+                        if (takePictureIntent.resolveActivity(requireActivity().packageManager) != null) {
+                            resultLauncher.launch(takePictureIntent)
+                            //startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+                        }
+                    }
+                }
+
+                override fun onPermissionRationaleShouldBeShown(
+                    permissions: List<PermissionRequest>,
+                    token: PermissionToken
+                ) {
+                    token.continuePermissionRequest()
+                }
+            }).check()
+    }
+
+
+
     var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
-            // There are no request codes
-            val data: Intent? = result.data
+
+
+            result.data?.let {
+
+                val uri: Uri? = it.data
+
+                uri?.let {
+
+                    try {
+                        // You can update this bitmap to your server
+                        val bitmap: Bitmap =
+                            MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, uri)
+
+                        // loading profile image from local cache
+                        loadProfile(uri.toString())
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+
+
+            }
+
+
+
+
+
             //--doSomeOperations()
         }
     }
