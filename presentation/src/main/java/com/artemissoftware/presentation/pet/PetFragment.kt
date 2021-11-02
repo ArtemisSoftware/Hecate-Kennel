@@ -2,38 +2,36 @@ package com.artemissoftware.presentation.pet
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import com.artemissoftware.presentation.R
-import com.artemissoftware.presentation.databinding.FragmentMemeBinding
-import com.artemissoftware.presentation.databinding.FragmentPetBinding
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.PermissionToken
-
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.listener.PermissionRequest
-
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import androidx.core.app.ActivityCompat.startActivityForResult
-
+import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Bundle
 import android.provider.MediaStore
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat.startActivityForResult
-import dagger.hilt.android.AndroidEntryPoint
 import androidx.core.content.ContextCompat
-import com.bumptech.glide.RequestManager
-import javax.inject.Inject
-import java.io.IOException
-import androidx.core.app.ActivityCompat.startActivityForResult
-import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.FileProvider
 import androidx.core.content.FileProvider.getUriForFile
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.artemissoftware.presentation.R
+import com.artemissoftware.presentation.databinding.FragmentPetBinding
+import com.bumptech.glide.RequestManager
+import com.karumi.dexter.BuildConfig.APPLICATION_ID
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
+import java.io.IOException
+import javax.inject.Inject
+import android.R
+
+
+
 
 
 @AndroidEntryPoint
@@ -48,12 +46,13 @@ class PetFragment : Fragment(R.layout.fragment_pet) {
 
 
     lateinit var fileName: String
-
+    lateinit var imageUri: Uri
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         _binding = FragmentPetBinding.bind(view)
         initOnClicklistener()
+        takeImage()
     }
 
     private fun initOnClicklistener(){
@@ -70,6 +69,7 @@ class PetFragment : Fragment(R.layout.fragment_pet) {
                         if (report.areAllPermissionsGranted()) {
                             //--showImagePickerOptions()
                             launchGalleryIntent()
+                            //launchCameraIntent()
                         }
                         if (report.isAnyPermissionPermanentlyDenied) {
                             //--showSettingsDialog()
@@ -89,6 +89,13 @@ class PetFragment : Fragment(R.layout.fragment_pet) {
 
 
     private fun loadProfile(url: String) {
+
+        glide.load(url)
+            .into(binding.imgPet)
+        binding.imgPet.setColorFilter(ContextCompat.getColor(requireContext(), android.R.color.transparent))
+    }
+
+    private fun loadProfile(url: Uri) {
 
         glide.load(url)
             .into(binding.imgPet)
@@ -179,15 +186,34 @@ class PetFragment : Fragment(R.layout.fragment_pet) {
                     if (report.areAllPermissionsGranted()) {
                         fileName = System.currentTimeMillis().toString() + ".jpg"
 
+                        /*
                         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                         takePictureIntent.putExtra(
                             MediaStore.EXTRA_OUTPUT,
                             getCacheImagePath(fileName)
                         )
+
                         if (takePictureIntent.resolveActivity(requireActivity().packageManager) != null) {
                             resultLauncher.launch(takePictureIntent)
-                            //startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-                        }
+                             }
+
+                        */
+
+                        val values = ContentValues()
+                        values.put(MediaStore.Images.Media.TITLE, "MyPicture")
+                        values.put(
+                            MediaStore.Images.Media.DESCRIPTION,
+                            "Photo taken on " + System.currentTimeMillis()
+                        )
+                        imageUri = requireActivity().getContentResolver().insert(
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values
+                        )!!
+                        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
+
+                        resultLauncher.launch(intent)
+ //startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+
                     }
                 }
 
@@ -205,6 +231,7 @@ class PetFragment : Fragment(R.layout.fragment_pet) {
     var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
 
+            val thumbnail = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, imageUri);
 
             result.data?.let {
 
@@ -236,7 +263,50 @@ class PetFragment : Fragment(R.layout.fragment_pet) {
     }
 
 
+    private var latestTmpUri: Uri? = null
+    private val takeImageResult = registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
+        if (isSuccess) {
+            latestTmpUri?.let { uri ->
+                //binding.imgPet.setImageURI(uri)
+                loadProfile(uri)
+            }
+        }
+    }
 
+
+    private fun takeImage() {
+        lifecycleScope.launchWhenStarted {
+            getTmpFileUri().let { uri ->
+                latestTmpUri = uri
+                takeImageResult.launch(uri)
+            }
+        }
+    }
+
+    private fun getTmpFileUri(): Uri {
+        val tmpFile = File.createTempFile("tmp_image_file", ".png", requireActivity().cacheDir).apply {
+            createNewFile()
+            deleteOnExit()
+        }
+
+        return FileProvider.getUriForFile(requireContext(), "${requireActivity().packageName.toString()}.provider", tmpFile)
+    }
+
+
+//    private fun cropImage(sourceUri: Uri) {
+//        val destinationUri =
+//            Uri.fromFile(File(getCacheDir(), queryName(getContentResolver(), sourceUri)))
+//        val options: UCrop.Options = Options()
+//        options.setCompressionQuality(IMAGE_COMPRESSION)
+//        options.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary))
+//        options.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary))
+//        options.setActiveWidgetColor(ContextCompat.getColor(this, R.color.colorPrimary))
+//        if (lockAspectRatio) options.withAspectRatio(ASPECT_RATIO_X, ASPECT_RATIO_Y)
+//        if (setBitmapMaxWidthHeight) options.withMaxResultSize(bitmapMaxWidth, bitmapMaxHeight)
+//        UCrop.of(sourceUri, destinationUri)
+//            .withOptions(options)
+//            .start(this)
+//    }
 
 
 }
