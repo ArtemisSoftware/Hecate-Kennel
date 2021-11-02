@@ -12,13 +12,10 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import android.app.AlertDialog
 import android.content.Context
 import com.artemissoftware.presentation.R
-import androidx.core.app.ActivityCompat.startActivityForResult
-
-import android.content.Intent
-import androidx.core.app.ActivityCompat
+import android.content.DialogInterface
 
 
-fun Fragment.imageOptions() {
+fun Fragment.imageOptions(galleryOption: () -> Unit, cameraOption: () -> Unit) {
     Dexter.withContext(requireContext())
         .withPermissions(
             Manifest.permission.CAMERA,
@@ -27,7 +24,7 @@ fun Fragment.imageOptions() {
         .withListener(object : MultiplePermissionsListener {
             override fun onPermissionsChecked(report: MultiplePermissionsReport) {
                 if (report.areAllPermissionsGranted()) {
-                    context?.let { showImagePickerOptions(it) }
+                    context?.let { showImagePickerOptions(it, galleryOption, cameraOption) }
                 }
                 if (report.isAnyPermissionPermanentlyDenied) {
                     context?.let { showSettingsDialog(it) }
@@ -60,3 +57,32 @@ private fun showSettingsDialog(context: Context) {
 //    intent.data = uri
 //    startActivityForResult(intent, 101)
 //}
+
+
+private fun showImagePickerOptions(context: Context, galleryOption: () -> Unit, cameraOption: () -> Unit) {
+    // setup the alert builder
+    val builder = AlertDialog.Builder(context)
+    builder.setTitle(context.getString(R.string.lbl_set_profile_photo))
+
+    // add a list
+    val animals = arrayOf(
+        context.getString(R.string.lbl_take_camera_picture),
+        context.getString(R.string.lbl_choose_from_gallery),
+        context.getString(R.string.cancel)
+    )
+    builder.setItems(
+        animals
+    ) { dialog: DialogInterface?, which: Int ->
+        when (which) {
+            0 -> cameraOption()
+            1 -> galleryOption()
+            else -> ""
+        }
+    }
+
+    // create and show the alert dialog
+    val dialog = builder.create()
+    dialog.show()
+}
+
+
