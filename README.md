@@ -12,3 +12,4 @@ App that shows random dogs
 - Glide
 - Navigation components
 - Flavours
+- Camera
